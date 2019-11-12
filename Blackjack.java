@@ -50,10 +50,10 @@ public class Blackjack
         System.out.println("Dealer has: " +dealerHand);
         if (value(dealerHand) > 21) {
             System.out.println("Dealer busts! You keep your bet!");
-            player.add(bet);
         }
         else {
             System.out.println("Dealer stands! You lose your bet!");
+            player.subtract(bet);
         }
     }
     
@@ -65,13 +65,14 @@ public class Blackjack
             //place bet
             System.out.println("Place your bet: ");
             bet = sc.nextInt();
-            player.subtract(bet);
+            //player.subtract(bet);
         
             //deal cards (display values)
             System.out.println("Your hand: " +playerHand);
             if (value(playerHand) > 21) {
                 System.out.println("You bust!");
                 game = false;
+                //dealer reveals second card, if dealer busts, you keep you bet
                 dealerPlay();
                 break;
             }
@@ -98,15 +99,29 @@ public class Blackjack
                 play = sc.next();
             }
         
-            dealerPlay();
+            //dealer play is different if stand, need to check value
+            if (play.equalsIgnoreCase("s")) {
+                System.out.println("Dealer has: " +dealerHand);
+                if (value(dealerHand) > 21) {
+                    System.out.println("Dealer busts! You keep your bet!");
+                }
+                else if (value(dealerHand) > value(playerHand)){
+                    System.out.println("Dealer has higher value! You lose your bet!");
+                    player.subtract(bet);
+                }
+                else {
+                    System.out.println("You have a higher value! You keep your bet!");
+                } 
+            }
             
+            game = false;
             System.out.println("New game (Y or N)?");
-            choice = sc.nextLine();
-            if (choice.equalsIgnoreCase("N")){
-                game = false;
+            choice = sc.next();
+            if (choice.equalsIgnoreCase("Y")){
+                game = true;
             }
         
-        } 
+        }  
         
     }
     
